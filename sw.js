@@ -1,13 +1,13 @@
 const CACHE_NAME = 'kalendar-reminder-beta1-v1';
 const urlsToCache = [
     '/',
-    '/index.html',
-    '/style.css',
-    '/app.js',
-    '/manifest.json',
-    '/icon-72x72.png',
-    '/icon-192x192.png',
-    '/icon-512x512.png'
+    'index.html',
+    'style.css',
+    'app.js',
+    'manifest.json',
+    'icon-72x72.png',
+    'icon-192x192.png',
+    'icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {
