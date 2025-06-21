@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KalendarReminder Beta 1</title>
+    <meta name="description" content="Aplicativo de calendário com escalas - Desenvolvido por Antônio Rafael">
+    <meta name="theme-color" content="#4a148c">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./assets/favicon.ico">
+</head>
+<body class="light-mode">
+    <div class="app-container">
+        <header>
+            <h1>KalendarReminder <span class="version">Beta 1</span></h1>
+            <div class="header-buttons">
+                <button id="themeToggleBtn">🌙 Modo Escuro</button>
+                <button id="installBtn" class="hidden">📲 Instalar App</button>
+                <button id="clearAllBtn" class="danger">🗑️ Limpar Todos</button>
+                <button id="viewToggleBtn">📅 Visualização: Mês</button>
+            </div>
+            <div class="developer">Desenvolvido por Antônio Rafael</div>
+        </header>
+        
+        <div id="calendar-container">
+            <div id="calendar"></div>
+        </div>
+        
+        <!-- Modal para adicionar eventos -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Adicionar Lembrete</h2>
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Título:</label>
+                        <input type="text" id="eventTitle" required>
+                        <small class="hint">Abreviação: <span id="abbreviationPreview"></span></small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventColor">Cor:</label>
+                        <select id="eventColor">
+                            <option value="#ff0000" style="color:#ff0000">Vermelho</option>
+                            <option value="#0000ff" style="color:#0000ff">Azul</option>
+                            <option value="#00ff00" style="color:#00ff00">Verde</option>
+                            <option value="#ffff00" style="color:#ffff00">Amarelo</option>
+                            <option value="#ff00ff" style="color:#ff00ff">Rosa</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventStart">Início:</label>
+                        <input type="datetime-local" id="eventStart" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventEnd">Fim (opcional):</label>
+                        <input type="datetime-local" id="eventEnd">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventReminder">Lembrar (minutos antes):</label>
+                        <select id="eventReminder">
+                            <option value="5">5 minutos</option>
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="60">1 hora</option>
+                            <option value="1440">1 dia</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventComment">Comentário (opcional):</label>
+                        <textarea id="eventComment" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isRecurring">
+                            <span>Evento recorrente</span>
+                        </label>
+                    </div>
+                    
+                    <div id="recurringOptions" class="hidden">
+                        <div class="form-group">
+                            <label for="recurrencePattern">Padrão de repetição:</label>
+                            <select id="recurrencePattern">
+                                <option value="daily">Diário</option>
+                                <option value="weekly">Semanal</option>
+                                <option value="monthly">Mensal</option>
+                                <option value="custom">Escala personalizada</option>
+                                <option value="12x36">Escala 12x36</option>
+                                <option value="24x48">Escala 24x48</option>
+                                <option value="24x72">Escala 24x72</option>
+                                <option value="48x144">Escala 48x144</option>
+                            </select>
+                        </div>
+                        
+                        <div id="customRecurrence" class="hidden">
+                            <div class="form-group">
+                                <label for="hoursWorking">Horas trabalhando:</label>
+                                <input type="number" id="hoursWorking" min="1" value="48">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="hoursOff">Horas de folga:</label>
+                                <input type="number" id="hoursOff" min="1" value="144">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="recurrenceEnd">Repetir até:</label>
+                                <input type="date" id="recurrenceEnd">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit">💾 Salvar Lembrete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Balão de informações -->
+        <div id="eventBalloon" class="balloon hidden">
+            <div class="balloon-content">
+                <div class="balloon-header">
+                    <h3 id="balloonTitle"></h3>
+                    <span class="balloon-close">&times;</span>
+                </div>
+                <div class="balloon-body">
+                    <p><strong>Início:</strong> <span id="balloonStart"></span></p>
+                    <p><strong>Fim:</strong> <span id="balloonEnd"></span></p>
+                    <p><strong>Lembrete:</strong> <span id="balloonReminder"></span></p>
+                    <p id="balloonCommentLabel"><strong>Comentário:</strong> <span id="balloonComment"></span></p>
+                    <div class="balloon-actions">
+                        <button id="deleteEventBtn" class="danger">🗑️ Remover Evento</button>
+                    </div>
+                </div>
+                <div class="balloon-tail"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carrega as dependências -->
+    <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/pt-br.min.js"></script>
+    
+    <!-- App principal -->
+    <script src="./app.js"></script>
+</body>
+</html>
