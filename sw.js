@@ -2,7 +2,7 @@
   "name": "KalendarReminder",
   "short_name": "Kalendar",
   "description": "Aplicativo de calendário com lembretes - Beta 1",
-  "start_url": "/",
+  "start_url": "/KalendarReminder/",
   "display": "standalone",
   "background_color": "#4a148c",
   "theme_color": "#4a148c",
